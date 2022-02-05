@@ -1,5 +1,5 @@
 ---
-# defaults file for ansible-role-ssh-identity-management
+# defaults file for ansible-role-fleet-key-pairs
 ssh_user: "{{ ansible_env.USER }}"
 ssh_file_path: "{{ansible_env.HOME}}/.ssh"
 
