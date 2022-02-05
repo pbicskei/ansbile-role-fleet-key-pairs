@@ -1,7 +1,7 @@
 ---
 - name: Remove public key from directory
   ansible.builtin.file:
-    path: "{{ ssh_file_path }}/{{ item.ssh_key_path}}"
+    path: "{{ ssh_file_path }}/{{ item.environment}}"
     state: directory
   when: item.state == "present"
   with_items: "{{ p3t_input }}"
@@ -12,7 +12,7 @@
     generate_ssh_key: yes
     ssh_key_type: "{{ item.ssh_key_type }}"
     ssh_key_bits: "{{ item.ssh_key_bits }}"
-    ssh_key_file: "{{ ssh_file_path }}/{{ item.ssh_key_path }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
+    ssh_key_file: "{{ ssh_file_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
     ssh_key_passphrase: "{{ item.ssh_passphrase }}"
     state: "{{ item.state }}"
     force: no

@@ -1,21 +1,21 @@
 ---
 - name: Check if key exists
   stat:
-    path: "{{ ssh_file_path }}/{{ item.ssh_key_path }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
+    path: "{{ ssh_file_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
   when: item.state == "absent"
   with_items: "{{ p3t_input }}"
   register: key_existed
 
 - name: Remove public key from directory
   ansible.builtin.file:
-    path: "{{ ssh_file_path }}/{{ item.ssh_key_path }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}.pub"
+    path: "{{ ssh_file_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}.pub"
     state: absent
   when: item.state == "absent"
   with_items: "{{ p3t_input }}"
 
 - name: Remove private key from directory
   ansible.builtin.file:
-    path: "{{ ssh_file_path }}/{{ item.ssh_key_path }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
+    path: "{{ ssh_file_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
     state: absent
   when: item.state == "absent"
   with_items: "{{ p3t_input }}"
