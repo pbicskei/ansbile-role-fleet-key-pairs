@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name:  ssh_identity_management
+  role_name:  ssh_key_creator
   author: Peter Bicskei
   description: Template for ansible roles
   company: no company (optional)
