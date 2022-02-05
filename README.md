@@ -1,7 +1,13 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role allows a process to generate ssh key-pairs for use with remote hosts and services.
+
+What it will do:
+
+* Generate a local key-pair for `user`@`service_domain` in `target_directory`
+* Place a managed block for this domain in `~/.ssh/config`
+* (Optional) ssh-add `<key_pair_path>` file credentials into key-store.
 
 Requirements
 ------------
