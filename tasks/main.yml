@@ -1,2 +1,7 @@
 ---
-# tasks file for ansible-role-template
+# tasks file for ansible-role-fleet-key-pairs
+- name: Remove new key-pairs
+  include: remove.yml
+
+- name: Creating new key-pairs
+  include: create.yml
