@@ -1,5 +1,5 @@
 galaxy_info:
-  role_name: fleet_key_pairs
+  role_name: pbicskei.fleet_key_pairs
   author: Peter Bicskei
   description: Template for ansible roles
   company: no company (optional)
