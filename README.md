@@ -12,7 +12,7 @@ What it will do:
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The role should be allowed to generate new `users`, `directories`, `key-pairs`.
 
 Role Variables
 --------------
@@ -29,9 +29,26 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yml
+---
+- hosts: localhost
+  connection: local
+
+  vars:
+    user_group: staff
+    ssh_user: "{{ ansible_env.USER }}"
+    ssh_file_path: "{{ lookup('env', 'PWD') }}/.ssh"
+
+    ssh_synced_state: present
+    
+    p3t_input:
+      - { ssh_service: "root" ,ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, ssh_key_path: "ansible/local", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
+      - { ssh_service: "root" ,ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, ssh_key_path: "ansible/local/user", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
+      - { ssh_service: "root" ,ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, ssh_key_path: "ansible/local/service", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
+   
+  roles:
+    - role: pbicskei.fleet_key_pairs
+```
 
 License
 -------
