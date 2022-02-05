@@ -16,6 +16,25 @@ defaults:
     working-directory: 'pbicskei.ansible'
 
 jobs:
+  develop:
+    name: Test playbook
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+        with:
+          path: 'pbicskei.ansible'
+
+      - name: Set up Python 3.
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install Ansible.
+        run: pip3 install ansible-base
+
+      - name: Run playbook.
+        run: ansible-playbook tests/test.yml
 
   release:
     name: Release
