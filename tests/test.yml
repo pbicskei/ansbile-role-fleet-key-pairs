@@ -1,18 +1,17 @@
 ---
-- hosts: localhost
+- name: Creating keys
+  hosts: localhost
   connection: local
 
   vars:
+    ssh_synced_state: present
     user_group: staff
     ssh_user: "{{ ansible_env.USER }}"
-    ssh_file_path: "{{ lookup('env', 'PWD') }}/.ssh"
+    ssh_key_path: "{{ lookup('env', 'PWD') }}/.build"
+    ssh_config_path: "{{ ssh_key_path }}/config"
+    p3r_input:
+        - { strict_host_key_checking: yes, ssh_config_port: 22, ssh_key_type: rsa, ssh_key_bits: 4096, state: "{{ ssh_synced_state }}", environment: test, ssh_passphrase: "{{ lookup('password', '/dev/null', seed=ansible_env.HOME) }}", ssh_service: root, ssh_key_domain: "local.test" }
+        - { strict_host_key_checking: yes, ssh_config_port: 22, ssh_key_type: rsa, ssh_key_bits: 4096, state: "{{ ssh_synced_state }}", environment: test, ssh_passphrase: "{{ lookup('password', '/dev/null', seed=ansible_env.HOME) }}", ssh_service: pbicskei, ssh_key_domain: "github.com" }
 
-    ssh_synced_state: present
-    
-    p3t_input:
-      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "ansible/local", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
-      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "ansible/local/user", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
-      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "ansible/local/service", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
-   
   roles:
-    - role: ../../ansible-role-ssh-identity
+    - role: ../ansbile-role-fleet-key-pairs

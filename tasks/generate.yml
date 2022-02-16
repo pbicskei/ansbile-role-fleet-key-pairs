@@ -1,0 +1,56 @@
+---
+
+- name: Generate p3r.config file
+  blockinfile:
+    marker: "# {mark} # 'Evil' p3r config"
+    block: |
+      {% for item in p3r_input %}
+      Host *.{{ item.ssh_key_domain }}
+        StrictHostKeyChecking {{ item.strict_host_key_checking }}
+        port 22
+        User {{ item.ssh_service }}
+        IdentityFile {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}
+
+      {% endfor %}
+    path: "{{ ssh_config_path }}/config.p3r"
+  delegate_to: 127.0.0.1
+  run_once: yes
+
+- name: Generate source file
+  blockinfile:
+    marker: "# {mark} # 'Evil' p3r source-ables"
+    block: |
+      {% for item in p3r_input %}
+      ssh-add -T {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}.pub
+      # {{ item.ssh_passphrase }}
+      {% endfor %}
+    path: "{{ ssh_config_path }}/source.p3r"
+  delegate_to: 127.0.0.1
+  run_once: yes
+
+- name: Generate secret file
+  blockinfile:
+    marker: "# {mark} # 'Evil' p3r secrets"
+    block: |
+      {% for item in p3r_input %}
+      ssh-add -T {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}.pub
+      # {{ item.ssh_passphrase }}
+      {% endfor %}
+    path: "{{ ssh_config_path }}/source.p3r"
+  delegate_to: 127.0.0.1
+  run_once: yes
+
+- name: Generate SSH keys"
+  user:
+    name: "{{ansible_env.USER}}"
+    generate_ssh_key: yes
+    ssh_key_type: "{{ item.ssh_key_type }}"
+    ssh_key_bits: "{{ item.ssh_key_bits }}"
+    ssh_key_file: "{{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
+    ssh_key_passphrase: "{{ item.ssh_passphrase }}"
+    state: "{{ item.state }}"
+    force: no
+  when: item.state != "absent"
+  with_items: "{{ p3r_input }}"
+  delegate_to: 127.0.0.1
+  run_once: yes

@@ -1,7 +1,13 @@
 ---
-# tasks file for ansible-role-fleet-key-pairs
-- name: Remove new key-pairs
-  include: remove.yml
 
-- name: Creating new key-pairs
+- name: CREATE
   include: create.yml
+  # no_log: True
+
+- name: GENERATE
+  include: generate.yml
+  # no_log: True
+
+- name: REMOVE
+  include: remove.yml
+  # no_log: True

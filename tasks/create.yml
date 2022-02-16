@@ -1,21 +1,21 @@
 ---
-- name: Remove public key from directory
+# tasks file for ansible-role-fleet-key-pairs
+- name: Ensure config directory exists
   ansible.builtin.file:
-    path: "{{ ssh_file_path }}/{{ item.environment}}"
+    path: "{{ ssh_config_path }}"
+    state: directory
+
+- name: Ensure config files exists
+  ansible.builtin.file:
+    path:  "{{ item }}"
+    state: touch
+  with_items:
+    - "{{ ssh_config_path }}/config.p3r"
+    - "{{ ssh_config_path }}/source.p3r"
+
+- name: Ensure environment directories exist
+  ansible.builtin.file:
+    path: "{{ ssh_key_path }}/{{ item.environment }}"
     state: directory
   when: item.state == "present"
-  with_items: "{{ p3t_input }}"
-
-- name: Generate SSH keys"
-  user:
-    name: "{{ansible_env.USER}}"
-    generate_ssh_key: yes
-    ssh_key_type: "{{ item.ssh_key_type }}"
-    ssh_key_bits: "{{ item.ssh_key_bits }}"
-    ssh_key_file: "{{ ssh_file_path }}/{{ item.environment }}/{{ item.ssh_key_domain }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
-    ssh_key_passphrase: "{{ item.ssh_passphrase }}"
-    state: "{{ item.state }}"
-    force: no
-  when: item.state != "absent"
-  with_items: "{{ p3t_input }}"
-  register: created
+  with_items: "{{ p3r_input }}"
