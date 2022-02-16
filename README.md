@@ -37,14 +37,14 @@ Including an example of how to use your role (for instance, with variables passe
   vars:
     user_group: staff
     ssh_user: "{{ ansible_env.USER }}"
-    ssh_file_path: "{{ lookup('env', 'PWD') }}/.ssh"
+    ssh_key_path: "{{ lookup('env', 'PWD') }}/.ssh"
 
     ssh_synced_state: present
     
-    p3t_input:
-      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "ansible/local", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
-      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "ansible/local/user", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
-      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "ansible/local/service", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
+    p3r_input:
+      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "dev", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
+      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "dev", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
+      - { ssh_service: "root", ssh_key_domain: "example.com", ssh_key_type: "rsa", ssh_key_bits: 4096, environment: "dev", ssh_passphrase: "", state: "{{ ssh_synced_state }}" }
    
   roles:
     - role: pbicskei.fleet_key_pairs
