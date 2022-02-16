@@ -5,7 +5,7 @@
     marker: "# {mark} # 'Evil' p3r config"
     block: |
       {% for item in p3r_input %}
-      Host *.{{ item.ssh_key_domain }}
+      Host {{ item.ssh_key_domain }}
         StrictHostKeyChecking {{ item.strict_host_key_checking }}
         port 22
         User {{ item.ssh_service }}
