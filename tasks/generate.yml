@@ -5,12 +5,12 @@
     marker: "# {mark} # 'Evil' p3r config"
     block: |
       {% for item in p3r_input %}
+
       Host {{ item.ssh_key_domain }}
         StrictHostKeyChecking {{ item.strict_host_key_checking }}
         port 22
         User {{ item.ssh_service }}
-        IdentityFile {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','_') }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}
-
+        IdentityFile {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain  | replace('.','-') }}/id_{{ item.ssh_key_type }}_{{ item.ssh_service }}
       {% endfor %}
     path: "{{ ssh_config_path }}/config.p3r"
   delegate_to: 127.0.0.1
@@ -21,8 +21,7 @@
     marker: "# {mark} # 'Evil' p3r source-ables"
     block: |
       {% for item in p3r_input %}
-      ssh-add -T {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','_') }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}.pub
-      # {{ item.ssh_passphrase }}
+      ssh-copy-id -F {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','-') }} {{ item.ssh_service }}@{{ item.ssh_key_domain }}
       {% endfor %}
     path: "{{ ssh_config_path }}/source.p3r"
   delegate_to: 127.0.0.1
@@ -33,8 +32,7 @@
     marker: "# {mark} # 'Evil' p3r secrets"
     block: |
       {% for item in p3r_input %}
-      ssh-add -T {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','_') }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}.pub
-      # {{ item.ssh_passphrase }}
+      ssh-add -T {{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','-') }}/id_{{ item.ssh_key_type }}_{{ item.ssh_service }}.pub
       {% endfor %}
     path: "{{ ssh_config_path }}/source.p3r"
   delegate_to: 127.0.0.1
@@ -46,7 +44,7 @@
     generate_ssh_key: yes
     ssh_key_type: "{{ item.ssh_key_type }}"
     ssh_key_bits: "{{ item.ssh_key_bits }}"
-    ssh_key_file: "{{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','_') }}/{{ item.ssh_service }}_{{ item.ssh_key_type }}"
+    ssh_key_file: "{{ ssh_key_path }}/{{ item.environment }}/{{ item.ssh_key_domain | replace('.','-') }}/id_{{ item.ssh_key_type }}_{{ item.ssh_service }}"
     ssh_key_passphrase: "{{ item.ssh_passphrase }}"
     state: "{{ item.state }}"
     force: no
